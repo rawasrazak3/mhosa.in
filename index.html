@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<style>
+
+.l-container {
+	 display: grid;
+	 grid-template-columns: repeat(4, 1fr);
+	 grid-gap: 30px;
+	 width: 100%;
+	 max-width: 1200px;
+	 padding: 30px;
+}
+ @media screen and (max-width: 760px) {
+	 .l-container {
+		 grid-template-columns: repeat(2, 1fr);
+	}
+}
+ .b-game-card {
+	 position: relative;
+	 z-index: 1;
+	 width: 100%;
+	 padding-bottom: 150%;
+	 perspective: 1000px;
+}
+ .b-game-card__cover {
+	 position: absolute;
+	 z-index: 1;
+	 top: 0;
+	 left: 0;
+	 width: 100%;
+	 height: 100%;
+	 overflow: hidden;
+	 background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+	 background-size: cover;
+	 perspective-origin: 50% 50%;
+	 transform-style: preserve-3d;
+	 transform-origin: top center;
+	 will-change: transform;
+	 transform: skewX(0.001deg);
+	 transition: transform 0.35s ease-in-out;
+}
+ .b-game-card__cover::after {
+	 display: block;
+	 content: '';
+	 position: absolute;
+	 z-index: 100;
+	 top: 0;
+	 left: 0;
+	 width: 100%;
+	 height: 120%;
+	 background: linear-gradient(226deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.4) 35%, rgba(255, 255, 255, 0.2) 42%, rgba(255, 255, 255, 0) 60%);
+	 transform: translateY(-20%);
+	 will-change: transform;
+	 transition: transform 0.65s cubic-bezier(0.18, 0.9, 0.58, 1);
+}
+ .b-game-card:hover .b-game-card__cover {
+	 transform: rotateX(7deg) translateY(-6px);
+}
+ .b-game-card:hover .b-game-card__cover::after {
+	 transform: translateY(0%);
+}
+ .b-game-card::before {
+	 display: block;
+	 content: '';
+	 position: absolute;
+	 top: 5%;
+	 left: 5%;
+	 width: 90%;
+	 height: 90%;
+	 background: rgba(0, 0, 0, 0.5);
+	 box-shadow: 0 6px 12px 12px rgba(0, 0, 0, 0.4);
+	 will-change: opacity;
+	 transform-origin: top center;
+	 transform: skewX(0.001deg);
+	 transition: transform 0.35s ease-in-out, opacity 0.5s ease-in-out;
+}
+ .b-game-card:hover::before {
+	 opacity: 0.6;
+	 transform: rotateX(7deg) translateY(-6px) scale(1.05);
+}
+
+.head1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.mum {
+  width: 700px;
+  height: 400px;
+  border-radius: 12%;
+  margin-bottom: 10px;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+  /* box-shadow:
+    -50px -50px 0 -40px var(--red),
+    50px 50px 0 -40px var(--red); */
+}
+@font-face {
+  font-family: 'ARUNA_N.TTF';
+  src: url('ARUNA_N.TTF');
+  font-weight: normal;
+  font-style: normal;
+}
+.about {
+background-image: url('mum4.jpg');
+background-repeat: no-repeat;
+/* background-attachment: fixed; */
+background-size: 100% auto;
+}
+/* .about::before {
+  content: "";
+  background:#000;
+  opacity: 0.5;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+} */
+/* .head1 img {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+} */
+.squarebg {
+  background-color: #ffffff; /* Background color */
+  border-radius: 20px; /* Adjust the value to control the curve */
+  padding: 10px; /* Add padding to give some space around the text */
+  /* border: 15px solid rgba(183,180,113,255); */
+}
+
+@property --gap{
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0;
+}
+@property --angle{
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0deg;
+}
+
+img.head1 {
+  --border: 15px;
+  --gap: 12px;
+  --color: #FA6900;
+  
+  width: 200px;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  border-radius: 50%;
+  margin: 20px;
+  cursor: pointer;
+  padding: calc(var(--border) + var(--gap));
+  
+  --angle: 90deg;
+  background:
+    radial-gradient(farthest-side,var(--color) 97%,#0000 101%) 85.35% 85.35%,
+    conic-gradient(from calc(180deg - var(--angle)/2),#0000 var(--angle),var(--color) 0),
+    radial-gradient(farthest-side,var(--color) 97%,#0000 101%) 14.65% 85.35%;
+  background-size: var(--border) var(--border),auto;
+  background-repeat: no-repeat;
+  
+  -webkit-mask:
+    radial-gradient(farthest-side, 
+     #000  calc(99%  - calc(var(--border) + var(--gap))),
+     #0000 calc(100% - calc(var(--border) + var(--gap))) 
+           calc(99%  - var(--border)), 
+     #000  calc(100% - var(--border)));
+          mask:
+    radial-gradient(farthest-side, 
+     #000  calc(99%  - calc(var(--border) + var(--gap))),
+     #0000 calc(100% - calc(var(--border) + var(--gap))) 
+           calc(99%  - var(--border)), 
+     #000  calc(100% - var(--border)));
+  transition: --angle .4s,--gap .4s;
+}
+img.head1:hover {
+  --angle: 0deg;
+  --gap: 5px;
+}
+
+.responsive {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+</style>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>MUM HSS OLD STUDENT ASSOCIATION</title>
+  <meta content="MHOSA" name="description">
+  <meta content="MHOSA" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/mainlogo.jpeg" rel="icon">
+  <link href="assets/img/mainlogo.jpeg" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <div class="logo">
+        <!-- <h1 class="text-light"><a href="index.html"><span>MHOSA</span></a></h1> -->
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">About Us</a></li>
+          <li><a class="nav-link scrollto" href="members.html">Patrons</a></li>
+          <li><a class="nav-link scrollto" href="#portfolio">Highlight</a></li>
+          <li><a class="nav-link scrollto" href="inner-page.html">MUM Faculties</a></li>
+          <li><a class="nav-link scrollto" href="management.html">MUM Management</a></li>
+          <!-- <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="#">Drop Down 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Drop Down</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a class="nav-link scrollto" href="events.html">Events</li>
+                  <li><a href="#">Deep Drop Down 2</a></li>
+                  <li><a href="#">Deep Drop Down 3</a></li>
+                  <li><a href="#">Deep Drop Down 4</a></li>
+                  <li><a href="#">Deep Drop Down 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Drop Down 2</a></li>
+              <li><a href="#">Drop Down 3</a></li>
+              <li><a href="#">Drop Down 4</a></li>
+            </ul>
+          </li> -->
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <!-- <li><a class="getstarted scrollto" href="#about">Get Started</a></li> -->
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-lg-6  order-2 order-lg-1 d-flex flex-column justify-content-center">
+          <h1 style="text-shadow:2px 2px #FA6900;">MUM HSS OLD STUDENTS ASSOCIATION</h1>
+          <h2 style="color: #FA6900; font-size: 200%;"><b>MHOSA</b></h2>
+          <!-- <div>
+            <a href="#about" class="btn-get-started scrollto">Get Started</a>
+          </div> -->
+        </div>
+        <!-- <div class="col-sm-12">
+          <img src="./assets/img/home.jpg">
+        </div> -->
+        <!-- <div class="col-lg-6 order-1 order-lg-2 hero-img">
+          <img src="assets/img/hero-img.svg" class="img-fluid animated" alt=""> -->
+        </div>
+      </div>
+    </div>
+
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about" class="about">
+      <div class="container">
+
+        <div class="row justify-content-between">
+          <div class="col-lg-4 d-flex align-items-center justify-content-center about-img">
+            <img src="mainlogo.jpeg" class="mum" alt="" data-aos="zoom-in">
+          </div>
+          <div class="col-lg-7 pt-5 pt-lg-0">
+            <h3 data-aos="fade-up">MHOSA</h3>
+            <p data-aos="fade-up" data-aos-delay="100" style="color:rgb(0, 0, 0); font-size:90%; line-height:200%; font-family:'sans-serif'; text-align: justify; text-justify: inter-word;" class="squarebg">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>"</b> MHOSA (എം യൂ എം ഹയർ സെക്കന്ററി ഓൾഡ് സ്റ്റുഡന്റസ് അസോസിയേഷൻ) എന്നത് എം യൂ എം ഹയർ സെക്കന്ററി വിഭാഗത്തിൽ പഠിച്ചു കഴിഞ്ഞ പൂർവ്വ വിദ്യാർത്ഥികളുടെ കൂട്ടായ്മയാണ്
+
+2021ൽ എം യൂ എം ഹയർ സെക്കന്ററി പൂർവ്വ വിദ്യാർഥികൾ കൂടി പൂർവ്വ വിദ്യാർഥി സംഗമം എന്ന ആശയത്തിൽ നിന്ന് രൂപം കൊണ്ട അസോസിയേഷൻ ആണ് എം യൂ എം ഹയർ സെക്കന്ററി ഓൾഡ് സ്റ്റുഡന്റ്സ് അസോസിയേഷൻ (MHOSA).
+ഒരുപാട് വിദ്യാർഥികൾ പ്ലസ്ടു ജീവിതം അവസാനിച്ചതിന് ശേഷവും സ്കൂളിന്റെ വിവിധ കാര്യങ്ങളിൽ മുന്നിൽ നിൽക്കുകയും, അത് തുടർന്നും നിലനിർത്തി കൊണ്ട് പോവാൻ അദ്ധ്യാപകരുടെയും ആഗ്രഹം MHOSA യുടെ രൂപീകരണത്തിന് പ്രചോദനം ആയി.
+
+തുടർന്ന് 2022ൽ അദ്ധ്യാപകരുടെയും, പൂർവ്വ വിദ്യാർത്ഥികളുടെയും പങ്കാളിത്തതോടെ മുഹമ്മദ് ഷാനിൽ പി കെ 2017 ബാച്ച് ചെയർമാനും, കൺവീനർ മുഹമ്മദ് എൻ പി 2019 ബാച്ച്, ആദിൽ കെ 2017 ബാച്ച് ട്രെഷറർ എന്നിവരുടെ കീഴിൽ കബീർ, ആയിഷ ഇഷ, ഇഹ്‌സാൻ എന്നിവർ വൈസ് ചെയർമാൻ മാരായും, സുജിന, ശഹബാസ് യൂ, ജാസിർ ബിൻ ജലീൽ ജോയിൻ കോൺവീനർമാരായും ആഡഹോക്ക് കമ്മിറ്റി നിലവിൽ വന്നു.
+കമ്മിറ്റി നിലവിൽ വന്നത് മുതൽ വിവിധ സാമൂഹിക പ്രവർത്തനങ്ങൾ ആണ് എം യൂ എം ഹയർ സെക്കന്ററി സ്കൂളിന്റെ സ്റ്റാഫുകളുടെ കൂടെ സഹായത്താൽ നടത്താൻ സാധിച്ചു.
+
+MHOSA യുടെ കൂടെ എന്നും കരുത്തായി നിന്ന് പ്രിയ സജീവൻ മാസ്റ്റർ (പ്രിൻസിപ്പൽ, എം യൂ എം ഹയർ സെക്കന്ററി സ്കൂൾ), അദീപ് മാസ്റ്റർ, ഹംസ മാസ്റ്റർ, ലത്തീഫ് മാസ്റ്റർ, ആഷിക് മാസ്റ്റർ, മറ്റു അധ്യാപകർ, സ്റ്റാഫുകൾ, എല്ലാവരുടെയും അധ്വാന ഫലം ആണ് MHOSA യുടെ ഓരോ പ്രവർത്തനങ്ങൾ.<b>"</b>
+
+            </p>
+            
+          </div>
+        </div>
+
+      </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Wishes From Management and Faculties</h2>
+        </div>
+ 
+        <div class="row">
+          <div class="col-md-3 col-lg-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
+            <div class="icon-box">
+              <div class="head1">
+                <img class="head1" src="\assets\img\management\1.jpg" alt="Principal's photo" class="responsive">
+                </div>
+              <!-- <div class="icon"><i class="bx bxl-dribbble"></i></div> -->
+              <h4 class="title"><a href="">M P ABDUL KAREEM</a></h4>
+              <p>"ചുരുങ്ങിയ കാലയളവിൽ സർഘാത്മഗമായ പ്രവർത്തനങ്ങൾ കൊണ്ട് ശ്രദ്ധേയമായ എം യൂ എം ഹയർ സെക്കന്ററി പൂർവ്വ് വിദ്യാർഥി കൂട്ടായ്മ (MHOSA) മാതൃകാപരമായ  പ്രവർത്തനങ്ങളാണ് നടത്തുന്നത്.
+
+അധ്യയന കാലവധി കഴിഞ്ഞിട്ടും സ്കൂളിന്റെയും, നാടിന്റെയും ഉന്നമനത്തിന് വേണ്ടി അഹോരാത്രം പ്രവർത്തനങ്ങൾ നടത്തുന്ന MHOSA സൗഹൃദത്തിന്റെ അറ്റ്പോവാത്ത ഒരിടം കൂടിയാണ്.
+
+സ്നേഹവും കരുതലുമായ പുതിയ കാൽവെപ്പിൽ അണിചേരൻ എല്ലാ വിദ്യാർത്ഥി സുഹൃത്തുക്കൾക്കും സാധ്യമാവട്ടെ എന്ന് ആശംസിക്കുന്നു.
+"</p>
+            </div>
+          </div>
+
+          <div class="col-md-3 col-lg-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="200">
+            <div class="icon-box">
+              <div class="head1">
+                <img class="head1" src="assets\img\teachers\SAJEEV.jpg" alt="Principal's photo" class="responsive">
+                </div>
+              <!-- <div class="icon"><i class="bx bx-file"></i></div> -->
+              <h4 class="title"><a href="">K SAJEEV KUMAR</a></h4>
+              <p class="description">"MHOSA  ഒരു കൂട്ടായ്മയാണ് ...
+സൗഹൃദത്തിൻ്റെ ...
+സ്നേഹത്തിൻ്റെ ...
+ഒത്തുചേരലിൻ്റെ ...
+കൂട്ടായ്യ.
+എം.യു.എം സ്കൂളിലെ ഓർമ്മകൾ ഹൃദയത്തിൽ പേറി നടക്കുന്നവരുടെ ഇടമാണിത്.
+സഹപാഠികൾക്ക് കരുത്താവണം MH0 SA .
+തളരുന്നവർക്ക് താങ്ങാവണം
+MHOSA . 
+  കാലമേറെ കഴിഞ്ഞാലും
+   എം.യു.എം സ്മൃതികൾ
+ഉണരുമ്പോൾ ചേക്കേറാനുള്ള 
+ചില്ലയായി എന്നും  MHOSA ഉണ്ടാവട്ടെ!"
+</p>
+            </div>
+          </div>
+
+          <!-- <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-tachometer"></i></div>
+              <h4 class="title"><a href="">Magni Dolores</a></h4>
+              <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="400">
+            <div class="icon-box">
+              <div class="icon"><i class="bx bx-world"></i></div>
+              <h4 class="title"><a href="">Nemo Enim</a></h4>
+              <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum</p>
+            </div>
+          </div> -->
+
+        </div>
+
+      </div>
+    </section><!-- End Services Section -->
+
+    <!-- ======= Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <p>HIGHLIGHTS</p>
+        </div>
+
+
+
+        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\blood5.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\blood5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Blood Donation Camp"><i class="bi bi-plus"></i></a>
+              </div>
+              <div class="portfolio-info">
+                <h4>Blood Donation Camp</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\food6.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\food6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Food Contribution"><i class="bi bi-plus"></i></a>
+              </div>
+              <div class="portfolio-info">
+                <h4>Food Contribution</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\teachersday1.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\teachersday1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Teacher's Day"><i class="bi bi-plus"></i></a>
+              </div>
+              <div class="portfolio-info">
+                <h4>Teacher's Day</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\blood6.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\blood6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Blood Donation Camp"><i class="bi bi-plus"></i></a>
+              </div>
+              <div class="portfolio-info">
+                <h4>Blood Donation Camp</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\mum4.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\mum4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="MUM"><i class="bi bi-plus"></i></a>
+              </div>
+              <div class="portfolio-info">
+                <h4>MUM</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\helpdesk1.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\helpdesk1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Admission Help Desk"><i class="bi bi-plus"></i></a>
+
+              </div>
+              <div class="portfolio-info">
+                <h4>Admission Help Desk</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\adhil3.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\adhil3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Alumni"><i class="bi bi-plus"></i></a>
+
+              </div>
+              <div class="portfolio-info">
+                <h4>Alumni</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\food7.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\food7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Food Contribution"><i class="bi bi-plus"></i></a>
+
+              </div>
+              <div class="portfolio-info">
+                <h4>Food Contribution</h4>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <div class="portfolio-wrap">
+              <img src="assets\img\programs\drink5.jpg" class="img-fluid" alt="">
+              <div class="portfolio-links">
+                <a href="assets\img\programs\drink5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Sports"><i class="bi bi-plus"></i></a>
+
+              </div>
+              <div class="portfolio-info">
+                <h4>Sports</h4>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Portfolio Section -->
+
+    <!-- ======= F.A.Q Section ======= -->
+    <!-- <section id="faq" class="faq section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>F.A.Q</h2>
+          <p>Frequently Asked Questions</p>
+        </div>
+
+        <ul class="faq-list" data-aos="fade-up" data-aos-delay="100">
+
+          <li>
+            <div data-bs-toggle="collapse" class="collapsed question" href="#faq1">Non consectetur a erat nam at lectus urna duis? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq1" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq2" class="collapsed question">Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq2" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq3" class="collapsed question">Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq3" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq4" class="collapsed question">Ac odio tempor orci dapibus. Aliquam eleifend mi in nulla? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq4" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq5" class="collapsed question">Tempus quam pellentesque nec nam aliquam sem et tortor consequat? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq5" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Molestie a iaculis at erat pellentesque adipiscing commodo. Dignissim suspendisse in est ante in. Nunc vel risus commodo viverra maecenas accumsan. Sit amet nisl suscipit adipiscing bibendum est. Purus gravida quis blandit turpis cursus in
+              </p>
+            </div>
+          </li>
+
+          <li>
+            <div data-bs-toggle="collapse" href="#faq6" class="collapsed question">Tortor vitae purus faucibus ornare. Varius vel pharetra vel turpis nunc eget lorem dolor? <i class="bi bi-chevron-down icon-show"></i><i class="bi bi-chevron-up icon-close"></i></div>
+            <div id="faq6" class="collapse" data-bs-parent=".faq-list">
+              <p>
+                Laoreet sit amet cursus sit amet dictum sit amet justo. Mauris vitae ultricies leo integer malesuada nunc vel. Tincidunt eget nullam non nisi est sit amet. Turpis nunc eget lorem dolor sed. Ut venenatis tellus in metus vulputate eu scelerisque. Pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus. Nibh tellus molestie nunc non blandit massa enim nec.
+              </p>
+            </div>
+          </li>
+
+        </ul>
+
+      </div>
+    </section> -->
+    
+    <!-- End F.A.Q Section -->
+
+    <!-- ======= Team Section ======= -->
+    <!-- <section id="team" class="team">
+      <div class="container">
+
+        <div class="section-title" data-aos="fade-up">
+          <h2>Team</h2>
+          <p>Our team is always here to help</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="100">
+            <div class="member">
+              <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Walter White</h4>
+                  <span>Chief Executive Officer</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="200">
+            <div class="member">
+              <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Sarah Jhonson</h4>
+                  <span>Product Manager</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+            <div class="member">
+              <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>William Anderson</h4>
+                  <span>CTO</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-3 col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="400">
+            <div class="member">
+              <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
+              <div class="member-info">
+                <div class="member-info-content">
+                  <h4>Amanda Jepson</h4>
+                  <span>Accountant</span>
+                </div>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""><i class="bi bi-linkedin"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div> -->
+    <!-- </section> -->
+    
+    <!-- End Team Section -->
+
+    <!-- ======= Clients Section ======= -->
+    <!-- <section id="clients" class="clients section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Clients</h2>
+          <p>They trusted us</p>
+        </div>
+
+        <div class="clients-slider swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper align-items-center">
+            <div class="swiper-slide"><img src="assets/img/clients/client-1.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="assets/img/clients/client-2.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="assets/img/clients/client-3.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="assets/img/clients/client-4.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="assets/img/clients/client-5.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="assets/img/clients/client-6.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="assets/img/clients/client-7.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="assets/img/clients/client-8.png" class="img-fluid" alt=""></div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+    </section> -->
+    
+    <!-- End Clients Section -->
+
+    <!-- ======= Contact Us Section ======= -->
+    <!-- <section id="contact" class="contact">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Contact Us</h2>
+          <p>Contact us the get started</p>
+        </div>
+
+        <div class="row">
+
+          <div class="col-lg-5 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="info">
+              <div class="address">
+                <i class="bi bi-geo-alt"></i>
+                <h4>Location:</h4>
+                <p>A108 Adam Street, New York, NY 535022</p>
+              </div>
+
+              <div class="email">
+                <i class="bi bi-envelope"></i>
+                <h4>Email:</h4>
+                <p>info@example.com</p>
+              </div>
+
+              <div class="phone">
+                <i class="bi bi-phone"></i>
+                <h4>Call:</h4>
+                <p>+1 5589 55488 55s</p>
+              </div>
+
+              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>
+            </div>
+
+          </div>
+
+          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="name">Your Name</label>
+                  <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group col-md-6 mt-3 mt-md-0">
+                  <label for="name">Your Email</label>
+                  <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <label for="name">Subject</label>
+                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+              </div>
+              <div class="form-group mt-3">
+                <label for="name">Message</label>
+                <textarea class="form-control" name="message" rows="10" required></textarea>
+              </div>
+              <div class="my-3">
+                <div class="loading">Loading</div>
+                <div class="error-message"></div>
+                <div class="sent-message">Your message has been sent. Thank you!</div>
+              </div>
+              <div class="text-center"><button type="submit">Send Message</button></div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </section> -->
+    
+    <!-- End Contact Us Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    
+    <section id="contact" class="contact">
+    </section>
+
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h3>MHOSA</h3>
+            <p>
+              MUM VHSS VATAKARA <br>
+              Vatakara, Kozhikode, 673103<br>
+              Kerala, India <br><br>
+              <strong>Phone:</strong> +91 9037614600, +91 8921530084 <br>
+              <strong>Email:</strong> mumhssosa@gmail.com<br>
+            </p>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <!-- <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+            </ul> -->
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <!-- <h4>Our Services</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
+            </ul> -->
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-links" style="text-align:right;">
+            <h4>Follow Us On</h4>
+            <div class="social-links mt-3">
+              <a href="https://www.instagram.com/mhosa_mum/" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container py-4">
+      <div class="copyright">
+        &copy; Copyright <strong><span>MHOSA</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="https://instagram.com/rawasrazak?igshid=ZWQyN2ExYTkwZQ==">Rawas Razak</a>
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
